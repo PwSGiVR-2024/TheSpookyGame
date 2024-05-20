@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638517899429772774
-    m_Hash: 1812342551
+      ticks: 638517913224861404
+    m_Hash: 333568083
   m_LockFileStatus:
     m_FilePath: D:/28911/TheSpookyGame/Spook/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638517899429812711
-    m_Hash: 2179762045
+      ticks: 638517913224907091
+    m_Hash: 1107673719
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -353,12 +353,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.textmeshpro@3.0.6
+- packageId: com.unity.textmeshpro@3.0.9
   testable: 0
   isDirectDependency: 1
-  version: 3.0.6
+  version: 3.0.9
   source: 1
-  resolvedPath: D:\28911\TheSpookyGame\Spook\Library\PackageCache\com.unity.textmeshpro@3.0.6
+  resolvedPath: D:\28911\TheSpookyGame\Spook\Library\PackageCache\com.unity.textmeshpro@3.0.9
   assetPath: Packages/com.unity.textmeshpro
   name: com.unity.textmeshpro
   displayName: TextMeshPro
@@ -367,7 +367,7 @@ m_ResolvedPackages:
     email: 
     url: 
   category: Text Rendering
-  type: asset
+  type: assets
   description: 'TextMeshPro is the ultimate text solution for Unity. It''s the perfect
     replacement for Unity''s UI Text and the legacy Text Mesh.
 
@@ -530,13 +530,13 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 637547111200000000
-  documentationUrl: 
+  datePublishedTicks: 638515173480000000
+  documentationUrl: https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.0/manual/index.html
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.textmeshpro.git
-    revision: 01e57e3b7de18af9dfe9baaa0a0ff5cc4765c899
+    revision: 0af193626b4f76795f7cb6c9b0f55389d0e4b1d6
     path: 
   unityLifecycle:
     version: 3.0.6
@@ -785,12 +785,12 @@ m_ResolvedPackages:
     deprecationMessage: 
   isDeprecated: 0
   deprecationMessage: 
-- packageId: com.unity.visualscripting@1.9.1
+- packageId: com.unity.visualscripting@1.9.4
   testable: 0
   isDirectDependency: 1
-  version: 1.9.1
+  version: 1.9.4
   source: 1
-  resolvedPath: D:\28911\TheSpookyGame\Spook\Library\PackageCache\com.unity.visualscripting@1.9.1
+  resolvedPath: D:\28911\TheSpookyGame\Spook\Library\PackageCache\com.unity.visualscripting@1.9.4
   assetPath: Packages/com.unity.visualscripting
   name: com.unity.visualscripting
   displayName: Visual Scripting
@@ -869,13 +869,13 @@ m_ResolvedPackages:
     configSource: 0
   hideInEditor: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 638284821510000000
+  datePublishedTicks: 638488567680000000
   documentationUrl: 
   hasRepository: 1
   repository:
     type: git
     url: https://github.cds.internal.unity3d.com/unity/com.unity.visualscripting.git
-    revision: 5e78e9c354ed1567dbcea08e2bd9992e4a473cfb
+    revision: 41aac2b7038c2b1259c546329890d3736ce2394e
     path: 
   unityLifecycle:
     version: 1.9.1
