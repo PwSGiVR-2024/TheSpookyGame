@@ -135,11 +135,11 @@ public class Player_MovementController : MonoBehaviour
     }
     private void Start()
     {
-        if (!PostProcessing)
+        if (PostProcessing && !Vignette)
         {
-            PostProcessing = GetComponent<PostProcessVolume>();
+            PostProcessing.profile.TryGetSettings(out Vignette);
         }
-        if (PostProcessing.profile.TryGetSettings(out Vignette)) Vignette.intensity.value = 0;
+        Vignette.intensity.value = 0;
     }
 
     private void Update()
