@@ -35,7 +35,7 @@ MonoBehaviour:
     value: 0
   color:
     overrideState: 1
-    value: {r: 0.44313726, g: 0.44313726, b: 0.44313726, a: 1}
+    value: {r: 0.4716981, g: 0.43387327, b: 0.43387327, a: 1}
   center:
     overrideState: 1
     value: {x: 0.5, y: 0.5}
@@ -47,7 +47,7 @@ MonoBehaviour:
     value: 1
   roundness:
     overrideState: 1
-    value: 0.25
+    value: 0
   rounded:
     overrideState: 0
     value: 0

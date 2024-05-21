@@ -169,38 +169,50 @@ namespace UnityEngine.Rendering.PostProcessing
         /// <returns><c>true</c> if the effect is currently enabled and supported</returns>
         public override bool IsEnabledAndSupported(PostProcessRenderContext context)
         {
-            bool state = enabled.value && intensity.value > 0f;
+            bool state = enabled.value
+                && intensity.value > 0f;
 
-            if (context != null && context.resources != null)
+            if (mode.value == AmbientOcclusionMode.ScalableAmbientObscurance)
             {
-                if (mode.value == AmbientOcclusionMode.ScalableAmbientObscurance)
+                state &= !RuntimeUtilities.scriptableRenderPipelineActive;
+
+                if (context != null)
                 {
-                    state &= !RuntimeUtilities.scriptableRenderPipelineActive;
-                    state &= context.resources.shaders != null && context.resources.shaders.scalableAO != null && context.resources.shaders.scalableAO.isSupported;
+                    state &= context.resources.shaders.scalableAO
+                        && context.resources.shaders.scalableAO.isSupported;
                 }
-                else if (mode.value == AmbientOcclusionMode.MultiScaleVolumetricObscurance)
+            }
+            else if (mode.value == AmbientOcclusionMode.MultiScaleVolumetricObscurance)
+            {
+                if (context != null)
                 {
-                    state &= context.resources.shaders != null && context.resources.shaders.multiScaleAO != null && context.resources.shaders.multiScaleAO.isSupported
-                        && context.resources.computeShaders != null && context.resources.computeShaders.multiScaleAODownsample1 != null && context.resources.computeShaders.multiScaleAODownsample2 != null
-                        && context.resources.computeShaders.multiScaleAORender != null && context.resources.computeShaders.multiScaleAOUpsample != null;
-                    state &= SystemInfo.supportsComputeShaders && !RuntimeUtilities.isAndroidOpenGL && !RuntimeUtilities.isWebNonWebGPU
+                    state &= context.resources.shaders.multiScaleAO
+                        && context.resources.shaders.multiScaleAO.isSupported
+                        && context.resources.computeShaders.multiScaleAODownsample1
+                        && context.resources.computeShaders.multiScaleAODownsample2
+                        && context.resources.computeShaders.multiScaleAORender
+                        && context.resources.computeShaders.multiScaleAOUpsample;
+                }
+
+                state &= SystemInfo.supportsComputeShaders
+                    && !RuntimeUtilities.isAndroidOpenGL
+                    && !RuntimeUtilities.isWebNonWebGPU
 #if UNITY_2023_2_OR_NEWER
-                && SystemInfo.IsFormatSupported(GraphicsFormat.R32_SFloat, GraphicsFormatUsage.Render)
-                && SystemInfo.IsFormatSupported(GraphicsFormat.R16_SFloat, GraphicsFormatUsage.Render)
-                && SystemInfo.IsFormatSupported(GraphicsFormat.R8_UNorm, GraphicsFormatUsage.Render);
+                    && SystemInfo.IsFormatSupported(GraphicsFormat.R32_SFloat, GraphicsFormatUsage.Render)
+                    && SystemInfo.IsFormatSupported(GraphicsFormat.R16_SFloat, GraphicsFormatUsage.Render)
+                    && SystemInfo.IsFormatSupported(GraphicsFormat.R8_UNorm, GraphicsFormatUsage.Render);
 #else
-                        && SystemInfo.IsFormatSupported(GraphicsFormat.R32_SFloat, FormatUsage.Render)
-                        && SystemInfo.IsFormatSupported(GraphicsFormat.R16_SFloat, FormatUsage.Render)
-                        && SystemInfo.IsFormatSupported(GraphicsFormat.R8_UNorm, FormatUsage.Render);
+                    && SystemInfo.IsFormatSupported(GraphicsFormat.R32_SFloat, FormatUsage.Render)
+                    && SystemInfo.IsFormatSupported(GraphicsFormat.R16_SFloat, FormatUsage.Render)
+                    && SystemInfo.IsFormatSupported(GraphicsFormat.R8_UNorm, FormatUsage.Render);
 #endif
-                }
             }
 
             return state;
         }
+    }
 
-
-        internal interface IAmbientOcclusionMethod
+    internal interface IAmbientOcclusionMethod
     {
         DepthTextureMode GetCameraFlags();
         void RenderAfterOpaque(PostProcessRenderContext context);
