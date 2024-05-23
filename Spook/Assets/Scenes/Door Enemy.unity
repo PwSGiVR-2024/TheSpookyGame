@@ -1062,6 +1062,10 @@ PrefabInstance:
       value: Doors
       objectReference: {fileID: 0}
     - target: {fileID: 7038046882205679604, guid: f19790718c73be840b0edc7fc7352218, type: 3}
+      propertyPath: Player
+      value: 
+      objectReference: {fileID: 7108909868685407408}
+    - target: {fileID: 7038046882205679604, guid: f19790718c73be840b0edc7fc7352218, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 7108909868685407408}
@@ -1082,8 +1086,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7038046882205679604, guid: f19790718c73be840b0edc7fc7352218, type: 3}
+      propertyPath: OuterRange
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7038046882205679604, guid: f19790718c73be840b0edc7fc7352218, type: 3}
       propertyPath: StopRadius
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7038046882205679604, guid: f19790718c73be840b0edc7fc7352218, type: 3}
+      propertyPath: MiddleRange
+      value: 4.4
       objectReference: {fileID: 0}
     - target: {fileID: 7038046882205679604, guid: f19790718c73be840b0edc7fc7352218, type: 3}
       propertyPath: SpawnCooldown

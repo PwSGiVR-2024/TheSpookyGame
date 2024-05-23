@@ -87,7 +87,6 @@ public class DoorAi : MonoBehaviour
         if (isSpawnOn && !IsInvoking(nameof(RandomNumber)) && !isPlayerInDetectionRadius )
         {
             InvokeRepeating(nameof(RandomNumber), 0, Interval);
-            Debug.Log("RNG Cycle Started");
         }
     }
 
@@ -97,7 +96,6 @@ public class DoorAi : MonoBehaviour
         if (IsInvoking(nameof(RandomNumber)))
         {
             CancelInvoke(nameof(RandomNumber));
-            Debug.Log("RNG Cycle Stopped");
         }
     }
 
@@ -130,15 +128,11 @@ public class DoorAi : MonoBehaviour
 
     IEnumerator Cooldown()
     {
-        // After the cooldown finishes, return to default color
         yield return new WaitForSeconds(CooldownDuration);
         SpawnPointColor.material.color = OGColor;
 
         Debug.LogError("Enemy despawned!");
         EnemySpawned = false;
-
-        yield return new WaitForSeconds(2);
-        StartRNGCycle();
     }
 
     private void OnDrawGizmos()
