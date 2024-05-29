@@ -1,30 +1,38 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.UI;
 
 public class Player_MovementController : MonoBehaviour
 {
-    [Header("Script Imports")]
-    [HideInInspector] public Rigidbody Rigidbody;
-
-    [Header("Script Exports")]
+    public Rigidbody Rigidbody;
     public Transform orientation;
+    public Transform cameraTransform;
+    private Vector3 initialCameraPosition;
     private Vector3 MovementDirection;
 
-    [Header("Movement")]
-    [HideInInspector] public float MoveSpeed;
-
+    [Header("Movement Settings")]
     [SerializeField] private float WalkSpeed = 5;
     [SerializeField] private float CrouchedSpeed;
     [SerializeField] private float SprintingSpeed;
     [SerializeField] private float GroundDrag;
 
-    [Header("Crouching")]
-    private readonly float CrouchingYScale = 0.75F;
+    [Header("Camera Bobbing Settings")]
+    [SerializeField] private float BobbingSpeed;
+    [SerializeField] private float BobbingAmount;
+    [SerializeField] private float BobbingMidpoint;
+    private float BobbingTimer = 0;
+
+    [HideInInspector] public float MoveSpeed;
+
+
+
+    // Crouching Settings - Available only in code - Don't change you dumbass!
     private float DefaultYScale;
     private const float CrouchForce = 5;
-
+    private readonly float CrouchingYScale = 0.75F;
 
     [Header("KeyBinds")]
     [SerializeField] private KeyCode SprintKey = KeyCode.LeftShift;
@@ -43,11 +51,12 @@ public class Player_MovementController : MonoBehaviour
     public MovementStates State;
     private bool SprintEnabled;
 
-
-
     [Header("Post-Processing")]
+    public Image SpeedLines;
     public PostProcessVolume PostProcessing;
     public Vignette Vignette;
+
+
     [Header("Vignette Settings")]
     [SerializeField] private float VignetteCrouched;
     [SerializeField] private float FadeDuration = 1.5F;
@@ -61,10 +70,21 @@ public class Player_MovementController : MonoBehaviour
     {
         return Mathf.Abs(Rigidbody.velocity.magnitude) > MovementThreshold;
     }
-    
+    private IEnumerator FadeSpeedLines(float targetAlpha, float duration)
+    {
+        float startAlpha = SpeedLines.color.a;
+        float elapsedTime = 0f;
 
+        while (elapsedTime < duration)
+        {
+            float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / duration);
+            SpeedLines.color = new Color(SpeedLines.color.r, SpeedLines.color.g, SpeedLines.color.b, newAlpha);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
 
-
+        SpeedLines.color = new Color(SpeedLines.color.r, SpeedLines.color.g, SpeedLines.color.b, targetAlpha);
+    }
     // Available Movement States
     public enum MovementStates
     {
@@ -108,14 +128,18 @@ public class Player_MovementController : MonoBehaviour
         switch (State)
         {
             case MovementStates.Standing:
+                SpeedLines.color = new Color(SpeedLines.color.r, SpeedLines.color.g, SpeedLines.color.b, 0);
                 break;
             case MovementStates.Walking:
+                SpeedLines.color = new Color(SpeedLines.color.r, SpeedLines.color.g, SpeedLines.color.b, 0); 
                 MoveSpeed = WalkSpeed;
                 break;
             case MovementStates.Sprinting:
+                StartCoroutine(FadeSpeedLines(0.6F, FadeDuration));
                 MoveSpeed = SprintingSpeed;
                 break;
             case MovementStates.Crouching:
+                SpeedLines.color = new Color(SpeedLines.color.r, SpeedLines.color.g, SpeedLines.color.b, 0); 
                 MoveSpeed = CrouchedSpeed;
                 break;
         }
@@ -129,6 +153,8 @@ public class Player_MovementController : MonoBehaviour
         Rigidbody = GetComponent<Rigidbody>();
         _ = GetComponent<Renderer>();
 
+        
+
         Rigidbody.freezeRotation = true;
         Rigidbody.useGravity = true;
         SprintEnabled = true;
@@ -140,6 +166,9 @@ public class Player_MovementController : MonoBehaviour
             PostProcessing.profile.TryGetSettings(out Vignette);
         }
         Vignette.intensity.value = 0;
+
+
+        initialCameraPosition = cameraTransform.localPosition;
     }
 
     private void Update()
@@ -148,13 +177,13 @@ public class Player_MovementController : MonoBehaviour
         PlayerInput();
         SpeedControl();
         UpdateState();
+        ApplyBobbingEffect();
     }
     private void FixedUpdate()
     {
         PlayerMovement();
         ExecuteState();
     }
-
 
     private void GroundedDrag()
     {
@@ -196,7 +225,6 @@ public class Player_MovementController : MonoBehaviour
         }
         else Rigidbody.useGravity = true;
     }
-
 
     // Reduced stopping time after releasing movement
     private void SpeedControl()
@@ -241,5 +269,36 @@ public class Player_MovementController : MonoBehaviour
     private Vector3 SlopeMoveDirection()
     {
         return Vector3.ProjectOnPlane(MovementDirection, SlopeHit.normal).normalized;
+    }
+
+    private void ApplyBobbingEffect()
+    {
+        if (State == MovementStates.Walking || State == MovementStates.Sprinting)
+        {
+            float waveslice = Mathf.Sin(BobbingTimer);
+            BobbingTimer += BobbingSpeed * MoveSpeed * Time.deltaTime;
+            if (BobbingTimer > Mathf.PI * 2)
+            {
+                BobbingTimer -= Mathf.PI * 2;
+            }
+
+            if (waveslice != 0)
+            {
+                float translateChange = waveslice * BobbingAmount;
+                float totalAxes = Mathf.Abs(HInput) + Mathf.Abs(VInput);
+
+                totalAxes = Mathf.Clamp(totalAxes, 0, 1);
+                translateChange = totalAxes * translateChange;
+
+                Vector3 localPosition = initialCameraPosition;
+                localPosition.y = initialCameraPosition.y + translateChange;
+                cameraTransform.localPosition = localPosition;
+            }
+        }
+        else
+        {
+            BobbingTimer = 0;
+            cameraTransform.localPosition = initialCameraPosition;
+        }
     }
 }
