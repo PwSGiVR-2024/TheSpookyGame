@@ -652,6 +652,7 @@ m_ResolvedPackages:
     - 1.8.4
     - 1.8.5
     - 1.8.6
+    - 1.8.7
     compatible:
     - 1.7.6
     - 1.8.0
@@ -661,6 +662,7 @@ m_ResolvedPackages:
     - 1.8.4
     - 1.8.5
     - 1.8.6
+    - 1.8.7
     recommended: 1.7.6
     deprecated: []
   dependencies:
