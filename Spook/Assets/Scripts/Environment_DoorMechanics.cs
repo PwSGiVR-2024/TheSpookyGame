@@ -5,7 +5,7 @@ using UnityEngine;
 public class Environment_DoorMechanics : MonoBehaviour
 {
     [Header("Scripts")]
-    [SerializeField] private Player_InteractionController InteractionController;
+    [SerializeField] private PlayerPickDrop InteractionController;
 
     [Header("Door Settings")]
     [SerializeField] private Animator DoorAnimator;
@@ -27,7 +27,7 @@ public class Environment_DoorMechanics : MonoBehaviour
     }
     private void Awake()
     {
-        Player_InteractionController.InteractionEvent += Interact;
+        PlayerPickDrop.InteractionEvent += Interact;
     }
     private void Interact(GameObject GameObjectReference)
     {
@@ -68,6 +68,6 @@ public class Environment_DoorMechanics : MonoBehaviour
 
     private void OnDisable()
     {
-        Player_InteractionController.InteractionEvent -= Interact; 
+        PlayerPickDrop.InteractionEvent -= Interact; 
     }
 }
