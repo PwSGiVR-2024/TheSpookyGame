@@ -3,13 +3,14 @@ using UnityEngine;
 [System.Serializable]
 public class GameOptions
 {
-    public float MouseSensitivity;   
+    public float MouseSensitivity;
     public float MasterVolume;
     public float MusicVolume;
     public float SFXVolume;
     public int ResolutionID;
     public string ScreenMode;
 }
+
 [System.Serializable]
 public class KeyBinds
 {
@@ -21,7 +22,6 @@ public class KeyBinds
     public KeyCode DropKey;
     public KeyCode FlashlightKey;
 }
-
 
 public class GameManager : MonoBehaviour
 {
@@ -35,11 +35,10 @@ public class GameManager : MonoBehaviour
     public GameOptions CurrentOptions;
     public KeyBinds CurrentKeyBinds;
 
-
-    [HideInInspector] public GameOptions OriginalOptions;    
+    [HideInInspector] public GameOptions OriginalOptions;
     [HideInInspector] public GameOptions DefaultOptions;
-   
-    [HideInInspector] public KeyBinds OriginalKeyBinds;   
+
+    [HideInInspector] public KeyBinds OriginalKeyBinds;
     [HideInInspector] public KeyBinds DefaultKeyBinds;
 
     public static GameManager Instance
@@ -48,13 +47,14 @@ public class GameManager : MonoBehaviour
         {
             if (instance == null)
             {
-                GameObject GameManagerObject = new ("GameManager");
+                GameObject GameManagerObject = new GameObject("GameManager");
                 instance = GameManagerObject.AddComponent<GameManager>();
                 DontDestroyOnLoad(GameManagerObject);
             }
             return instance;
         }
     }
+
     private void InitializeDefaultValues()
     {
         DefaultKeyBinds = new KeyBinds
@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
             ScreenMode = "Fullscreen"
         };
     }
+
     private void Awake()
     {
         InstanceCheck();
@@ -89,8 +90,9 @@ public class GameManager : MonoBehaviour
         Options();
         Keybinds();
     }
+
     public void Keybinds()
-    {       
+    {
         OriginalKeyBinds = new KeyBinds
         {
             MovementType = "WASD",
@@ -103,19 +105,23 @@ public class GameManager : MonoBehaviour
         };
         CurrentKeyBinds = OriginalKeyBinds;
 
-        CurrentKeyBinds = new KeyBinds
+        if (keybinds != null)
         {
-            MovementType = keybinds.MovementModes[keybinds.CurrentMovementModeID],
-            SprintKey = keybinds.Keys["Sprint"],
-            SneakKey = keybinds.Keys["Sneak"],
-            InteractKey = keybinds.Keys["Interaction"],
-            UseKey = keybinds.Keys["Use Item"],
-            DropKey = keybinds.Keys["Drop Item"],
-            FlashlightKey = keybinds.Keys["Use Flash"]
-        };
+            CurrentKeyBinds = new KeyBinds
+            {
+                MovementType = keybinds.MovementModes[keybinds.CurrentMovementModeID],
+                SprintKey = keybinds.Keys["Sprint"],
+                SneakKey = keybinds.Keys["Sneak"],
+                InteractKey = keybinds.Keys["Interaction"],
+                UseKey = keybinds.Keys["Use Item"],
+                DropKey = keybinds.Keys["Drop Item"],
+                FlashlightKey = keybinds.Keys["Use Flash"]
+            };
+        }
     }
+
     public void Options()
-    {       
+    {
         OriginalOptions = new GameOptions
         {
             MouseSensitivity = 50,
@@ -128,15 +134,18 @@ public class GameManager : MonoBehaviour
 
         CurrentOptions = OriginalOptions;
 
-        CurrentOptions = new GameOptions
+        if (options != null)
         {
-            MouseSensitivity = options.MouseSensValue,
-            MasterVolume = options.MasterVolumeValue,
-            MusicVolume = options.MusicVolumeValue,
-            SFXVolume = options.SFXVolumeValue,
-            ResolutionID = options.ResolutionIDValue,
-            ScreenMode = options.ScreenModes[options.CurrentScreenModeID],
-        };
+            CurrentOptions = new GameOptions
+            {
+                MouseSensitivity = options.MouseSensValue,
+                MasterVolume = options.MasterVolumeValue,
+                MusicVolume = options.MusicVolumeValue,
+                SFXVolume = options.SFXVolumeValue,
+                ResolutionID = options.ResolutionIDValue,
+                ScreenMode = options.ScreenModes[options.CurrentScreenModeID],
+            };
+        }
     }
 
     public void SetScreenMode(string mode)
@@ -165,6 +174,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     public void SetMovementMode(string mode)
     {
         if (!HasPendingChanges && mode != keybinds.MovementModes[keybinds.CurrentMovementModeID])
@@ -193,10 +203,12 @@ public class GameManager : MonoBehaviour
     {
         DefaultOptions.ResolutionID = ResID;
     }
+
     public void SetControlModeOnStart(string ModeName)
     {
         DefaultKeyBinds.MovementType = ModeName;
     }
+
     private void InstanceCheck()
     {
         if (instance != null && instance != this)
@@ -209,5 +221,4 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
     }
-
 }
