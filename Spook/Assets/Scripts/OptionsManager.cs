@@ -181,20 +181,17 @@ public class OptionsManager : MonoBehaviour
     public void ToggleVSync(bool OnOff)
     {
         QualitySettings.vSyncCount = OnOff ? 1 : 0;
-        menuManager.Debugger("VSync toggled");
         Debug.Log(OnOff);
         gameManager.HasPendingChanges = true;
     }
 
     public void SetBloom(bool NewValue)
     {
-        menuManager.Debugger("SetBloom");
-        //gameManager.HasPendingChanges = true;
+        gameManager.HasPendingChanges = true;
     }
     public void SetParticles(bool NewValue)
     {
-        menuManager.Debugger("SetParticles");
-        //gameManager.HasPendingChanges = true;
+        gameManager.HasPendingChanges = true;
     }
 
 
@@ -305,7 +302,6 @@ public class OptionsManager : MonoBehaviour
         ScreenModeInfo.text = ScreenModes[CurrentScreenModeID];
        
         gameManager.HasPendingChanges = true;
-        menuManager.Debugger("Set Screen Mode");
     }
 
     //  Confirm, or reset the changes made in settings
@@ -315,7 +311,6 @@ public class OptionsManager : MonoBehaviour
         {
             int SelectedResID = ScreenResolutionList.value;
             OnResolutionChanged(SelectedResID);
-            menuManager.Debugger("Confirm");
 
             gameManager.CurrentOptions.MasterVolume = MasterVolumeSlider.value;
             gameManager.CurrentOptions.MusicVolume = MusicVolumeSlider.value;
@@ -352,9 +347,6 @@ public class OptionsManager : MonoBehaviour
     //  Returning to previous Menu, or the options, based on the Player's choice
     public void ReturnToPrevious()
     {
-        menuManager.Debugger("Return");
-
-
         if (gameManager.HasPendingChanges)
         {
             UnsavedPopUp.SetActive(true);
@@ -363,16 +355,14 @@ public class OptionsManager : MonoBehaviour
         }
         else if (!gameManager.HasPendingChanges)
         {
-            //Previous.SetActive(true);
-            //Settings.SetActive(false);
+            Previous.SetActive(true);
+            Settings.SetActive(false);
             transitionManager.TransitionIn();
         } 
 
     }
     public void ReturnToOptions()
     {
-        menuManager.Debugger("Return To Options");
-
         UnsavedPopUp.SetActive(false);
 
         Yes.onClick.RemoveListener(ReturnWithoutSave);
@@ -381,21 +371,18 @@ public class OptionsManager : MonoBehaviour
 
     public void ReturnWithoutSave()
     {
-        menuManager.Debugger("Return Without Save");
         RestoreDefaults();
         UnsavedPopUp.SetActive(false);
 
         Yes.onClick.RemoveListener(ReturnWithoutSave);
         No.onClick.RemoveListener(ReturnToOptions);
 
-        //menuManager.Menu.SetActive(true);
-        //menuManager.Settings.SetActive(false);
+        Previous.SetActive(true);
+        Settings.SetActive(false);
         transitionManager.TransitionIn();
     }
     public void RestoreDefaults()
     {
-        menuManager.Debugger("Reset");
-
         // Resetting the sliders and other options
         MouseSensSlider.value = gameManager.DefaultOptions.MouseSensitivity;
         MasterVolumeSlider.value = gameManager.DefaultOptions.MasterVolume;

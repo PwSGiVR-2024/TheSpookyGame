@@ -1,5 +1,6 @@
 using System.Transactions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
@@ -55,6 +56,7 @@ public class MenuManager : MonoBehaviour
     public void StartNewGame()
     {
         Debugger("New Game");
+        SceneManager.LoadScene("Main Level", LoadSceneMode.Single);
     }
 
     public void ContinueTheGame()

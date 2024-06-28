@@ -41,8 +41,8 @@ public class KeybindManager : MonoBehaviour
 
     public void AddKeys()
     {
-        Keys.Add("Sprint", gameManager.DefaultKeyBinds.SprintKey);
         Keys.Add("Sneak", gameManager.DefaultKeyBinds.SneakKey);
+        Keys.Add("Sprint", gameManager.DefaultKeyBinds.SprintKey);
         Keys.Add("Interaction", gameManager.DefaultKeyBinds.InteractKey);
         Keys.Add("Use Item", gameManager.DefaultKeyBinds.UseKey);
         Keys.Add("Drop Item", gameManager.DefaultKeyBinds.DropKey);
@@ -90,7 +90,6 @@ public class KeybindManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(conflictingFunction))
             {
-                Debug.LogWarning($"Key '{NewKeyCode}' is already assigned to '{conflictingFunction}'.");
                 ShowWarningMessage();
                 return;
             }
@@ -155,6 +154,7 @@ public class KeybindManager : MonoBehaviour
                     CurrentKey = null;
                     PopUp.SetActive(false); // Hide pop-up as an unused key is pressed
                 }
+                
                 else
                 {
                     Debug.LogWarning($"Key '{KeyPressed}' is already assigned to a function.");

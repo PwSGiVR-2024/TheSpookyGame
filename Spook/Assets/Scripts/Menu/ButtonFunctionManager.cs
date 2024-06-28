@@ -25,7 +25,8 @@ public class ButtonFunctionManager : MonoBehaviour, IPointerEnterHandler, IPoint
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        ButtonIMG.color = OnHoverAlpha; AudioManager.Instance.PlaySound(HoverSound);                  
+        ButtonIMG.color = OnHoverAlpha; AudioManager.Instance.PlaySound(HoverSound);
+        Debug.Log("Hovered!");
     }
 
     public void OnPointerExit(PointerEventData eventData)

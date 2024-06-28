@@ -81,14 +81,13 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        Options();
+        Keybinds();
         InstanceCheck();
         InitializeDefaultValues();
 
         options = FindObjectOfType<OptionsManager>();
-        keybinds = FindObjectOfType<KeybindManager>();
-
-        Options();
-        Keybinds();
+        keybinds = FindObjectOfType<KeybindManager>();      
     }
 
     public void Keybinds()

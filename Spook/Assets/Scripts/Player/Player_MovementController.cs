@@ -29,6 +29,7 @@ public class Player_MovementController : MonoBehaviour
     public Transform cameraTransform;
     private Vector3 initialCameraPosition;
     private Vector3 MovementDirection;
+    GameManager gameManager;
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource WoodFootsteps;
@@ -65,8 +66,8 @@ public class Player_MovementController : MonoBehaviour
     private readonly float CrouchingYScale = 0.75F;
 
     [Header("KeyBinds")]
-    [SerializeField] private KeyCode SprintKey = KeyCode.LeftShift;
-    [SerializeField] private KeyCode CrouchKey = KeyCode.LeftControl;
+    [SerializeField] private KeyCode SprintKey;
+    [SerializeField] private KeyCode CrouchKey;
 
     [Header("GroundCheck")]
     [SerializeField] private float PlayerHeight = 1.8F;
@@ -149,7 +150,6 @@ public class Player_MovementController : MonoBehaviour
     }
 
     //Checks
-
     public bool HasPlayerMoved(float MovementThreshold = 0.2F)
     {
         return Mathf.Abs(Rigidbody.velocity.magnitude) > MovementThreshold;
@@ -288,11 +288,17 @@ public class Player_MovementController : MonoBehaviour
         Rigidbody = GetComponent<Rigidbody>();
         _ = GetComponent<Renderer>();
 
+        gameManager = GameManager.Instance;
         SoundLoadOnAwake();
 
         Rigidbody.freezeRotation = true;
         Rigidbody.useGravity = true;
         SprintEnabled = true;
+
+        SprintKey = gameManager.CurrentKeyBinds.SprintKey;
+        CrouchKey = gameManager.CurrentKeyBinds.SneakKey;
+
+
     }
     private void Start()
     {
@@ -332,9 +338,21 @@ public class Player_MovementController : MonoBehaviour
     // Player's input for the movement
     private void PlayerInput()
     {
-        HInput = Input.GetAxisRaw("Horizontal");
-        VInput = Input.GetAxisRaw("Vertical");
+        // Reset inputs
+        HInput = 0;
+        VInput = 0;
 
+        // Check the movement type from the game manager and call the respective method
+        if (gameManager.CurrentKeyBinds.MovementType == "WASD")
+        {
+            HandleWASDInput();
+        }
+        else if (gameManager.CurrentKeyBinds.MovementType == "Arrow Keys")
+        {
+            HandleArrowKeyInput();
+        }
+
+        // Crouch and sprint logic
         if (Input.GetKeyDown(CrouchKey) && Grounded && !Input.GetKeyDown(SprintKey))
         {
             transform.localScale = new Vector3(transform.localScale.x, CrouchingYScale, transform.localScale.z);
@@ -345,8 +363,27 @@ public class Player_MovementController : MonoBehaviour
         {
             transform.localScale = new Vector3(transform.localScale.x, DefaultYScale, transform.localScale.z);
         }
-
     }
+
+    // Using WASD keys for horizontal and vertical inputs
+    private void HandleWASDInput()
+    {
+        HInput = Input.GetAxisRaw("Horizontal");
+        VInput = Input.GetAxisRaw("Vertical");
+    }
+
+    // Using arrow keys for horizontal and vertical inputs
+    private void HandleArrowKeyInput()
+    {
+        if (Input.GetKey(KeyCode.LeftArrow)) HInput = -1f;
+
+        if (Input.GetKey(KeyCode.RightArrow)) HInput = 1f;
+
+        if (Input.GetKey(KeyCode.UpArrow)) VInput = 1f;
+
+        if (Input.GetKey(KeyCode.DownArrow)) VInput = -1f;
+    }
+
     private void PlayerMovement()
     {
         MovementDirection = orientation.forward * VInput + orientation.right * HInput;
@@ -377,9 +414,9 @@ public class Player_MovementController : MonoBehaviour
             CurrentAudio.clip = StepSounds[RandomID];
 
             // Adjust the FootstepsVolume based on crouching state
-            if (State == MovementStates.Crouching) FootstepsVolume = DefaultFootstepsVolume - 0.2F;
-            else if (State == MovementStates.Sprinting) FootstepsVolume = DefaultFootstepsVolume + 0.3F;
-            else if (State != MovementStates.Crouching || State != MovementStates.Sprinting) FootstepsVolume = DefaultFootstepsVolume;
+            if (State == MovementStates.Crouching) FootstepsVolume = (DefaultFootstepsVolume - 0.2F) * gameManager.CurrentOptions.SFXVolume;
+            else if (State == MovementStates.Sprinting) FootstepsVolume = (DefaultFootstepsVolume + 0.3F) * gameManager.CurrentOptions.SFXVolume;
+            else if (State != MovementStates.Crouching || State != MovementStates.Sprinting) FootstepsVolume = DefaultFootstepsVolume * gameManager.CurrentOptions.SFXVolume;
 
             CurrentAudio.volume = FootstepsVolume;
             CurrentAudio.Play();
@@ -465,4 +502,5 @@ public class Player_MovementController : MonoBehaviour
             cameraTransform.localPosition = initialCameraPosition;
         }
     }
+    
 }

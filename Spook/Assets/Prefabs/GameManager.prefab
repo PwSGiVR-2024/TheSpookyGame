@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &196177273904260547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4065302114278795181}
+  - component: {fileID: 3456237476676846316}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4065302114278795181
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196177273904260547}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3456237476676846316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196177273904260547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39f1f5fa7432e894ca3240496d0c7544, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HasPendingChanges: 0
+  CurrentOptions:
+    MouseSensitivity: 0
+    MasterVolume: 0
+    MusicVolume: 0
+    SFXVolume: 0
+    ResolutionID: 0
+    ScreenMode: 
+  CurrentKeyBinds:
+    MovementType: 
+    SprintKey: 0
+    SneakKey: 0
+    InteractKey: 0
+    UseKey: 0
+    DropKey: 0
+    FlashlightKey: 0
+  OriginalOptions:
+    MouseSensitivity: 50
+    MasterVolume: 100
+    MusicVolume: 50
+    SFXVolume: 50
+    ResolutionID: 18
+    ScreenMode: Fullscreen
+  DefaultOptions:
+    MouseSensitivity: 0
+    MasterVolume: 0
+    MusicVolume: 0
+    SFXVolume: 0
+    ResolutionID: 0
+    ScreenMode: 
+  OriginalKeyBinds:
+    MovementType: 
+    SprintKey: 0
+    SneakKey: 0
+    InteractKey: 0
+    UseKey: 0
+    DropKey: 0
+    FlashlightKey: 0
+  DefaultKeyBinds:
+    MovementType: 
+    SprintKey: 0
+    SneakKey: 0
+    InteractKey: 0
+    UseKey: 0
+    DropKey: 0
+    FlashlightKey: 0

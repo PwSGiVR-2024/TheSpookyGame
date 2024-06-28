@@ -52,7 +52,7 @@ public class ButtonAnimationManager : MonoBehaviour, IPointerEnterHandler, IPoin
             currentPosition = Vector3.Lerp(InitialPosition, TargetPosition, TimeElapsed / MoveDuration);
             Button.transform.position = currentPosition;
 
-            TimeElapsed += Time.deltaTime;
+            TimeElapsed += Time.unscaledDeltaTime;
             yield return null;
         }
 

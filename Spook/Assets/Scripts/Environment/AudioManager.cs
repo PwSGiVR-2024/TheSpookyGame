@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource SFXSource;
 
     [Header("-- Audio Clip --")]
-    public AudioClip BackgroundTrack;
+    public AudioClip BackgroundTrack; // For Main Menu
+    public AudioClip BackgroundTrack2; // For Main Level
     public AudioClip ButtonClick;
     public AudioClip ButtonHover;
 
@@ -48,8 +50,48 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        MusicSource.clip = BackgroundTrack;
-        MusicSource.Play();
+        // Play initial background track
+        PlayMusicForCurrentScene();
+
+        // Subscribe to scene loaded event
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe from scene loaded event
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        PlayMusicForCurrentScene();
+    }
+
+    private void PlayMusicForCurrentScene()
+    {
+        // Get the current scene
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        // Check the scene name and play the corresponding audio
+        if (currentScene.name == "Main Menu")
+        {
+            MusicSource.clip = BackgroundTrack;
+        }
+        else if (currentScene.name == "Main Level")
+        {
+            MusicSource.clip = BackgroundTrack2;
+        }
+        else
+        {
+            MusicSource.clip = null;
+        }
+
+        // Play the audio if there is a clip
+        if (MusicSource.clip != null)
+        {
+            MusicSource.Play();
+        }
     }
 
     public void PlaySound(AudioClip clip)
