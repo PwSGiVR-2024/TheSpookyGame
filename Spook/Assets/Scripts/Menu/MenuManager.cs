@@ -65,9 +65,8 @@ public class MenuManager : MonoBehaviour
     }
     public void GoToSettings()
     {
-        //Settings.SetActive(true);
-        //Menu.SetActive(false);
-        transitionManager.TransitionOut();
+        Settings.SetActive(true);
+        Menu.SetActive(false);
         Debugger("Settings");
         
     }

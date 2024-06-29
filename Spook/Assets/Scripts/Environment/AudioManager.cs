@@ -14,10 +14,16 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource SFXSource;
 
     [Header("-- Audio Clip --")]
-    public AudioClip BackgroundTrack; // For Main Menu
-    public AudioClip BackgroundTrack2; // For Main Level
+    public AudioClip BackgroundTrack;
+    public AudioClip BackgroundTrack2;
     public AudioClip ButtonClick;
     public AudioClip ButtonHover;
+    public AudioClip DoorOpen;
+    public AudioClip DoorClose;
+    public AudioClip DoorUnlock;
+    public AudioClip ItemGrab;
+    public AudioClip FlashBuzz;
+    public AudioClip FlashClick;
 
     public static AudioManager Instance
     {
@@ -50,16 +56,12 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        // Play initial background track
         PlayMusicForCurrentScene();
-
-        // Subscribe to scene loaded event
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDestroy()
     {
-        // Unsubscribe from scene loaded event
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 

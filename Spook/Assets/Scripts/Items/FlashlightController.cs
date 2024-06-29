@@ -4,6 +4,7 @@ using System.Collections;
 
 public class FlashlightController : MonoBehaviour
 {
+    GameManager gameManager;
     [Header("Script Imports")]
     public InventoryManagement InventoryManage;
     public PlayerPickDrop InteractDetect;
@@ -43,6 +44,7 @@ public class FlashlightController : MonoBehaviour
 
     private void Awake()
     {
+        gameManager = GameManager.Instance;
         LightRays.SetActive(false);
         Charge = MaxCharge;
         Lamp.intensity = 0;
@@ -173,7 +175,7 @@ public class FlashlightController : MonoBehaviour
         {
             float RandomValue = Random.Range(0.1f * flickerIntensity, flickerIntensity);
             Lamp.intensity = RandomValue;
-            FlashBuzz.volume = 1.5F * RandomValue;
+            FlashBuzz.volume = (1.5F * RandomValue) * gameManager.CurrentOptions.SFXVolume;
             yield return new WaitForSeconds(Random.Range(0.2f, 0.5f));
         }
 
@@ -189,7 +191,8 @@ public class FlashlightController : MonoBehaviour
             {
                 FlashClick.Play();
                 FlashBuzz.Play();
-                FlashBuzz.volume = 1.5F;
+                FlashClick.volume = 1 * gameManager.CurrentOptions.SFXVolume;
+                FlashBuzz.volume = 1.5F * gameManager.CurrentOptions.SFXVolume;
                 IsFlashlightOn = true;
                 StartDrainingFlashlight();
             }

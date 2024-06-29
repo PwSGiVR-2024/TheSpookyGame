@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class PlayerPickDrop : MonoBehaviour
 {
-    public delegate void InteractionDelegate(GameObject GameObjectReference);
+    public delegate void InteractionDelegate(GameObject gameObjectReference);
     public static event InteractionDelegate InteractionEvent;
-
 
     [Header("Transforms and Mask")]
     [SerializeField] private Transform CameraLocation;
@@ -36,9 +34,6 @@ public class PlayerPickDrop : MonoBehaviour
     public bool IsHeld { get => Held; set => Held = value; }
     public bool SlotInUse { get => SlotUsed; set => SlotUsed = value; }
 
-
-
-
     [Header("List")]
     private List<ObjectGrabbable> Grabbed = new();
     public List<ObjectGrabbable> GrabbedObjects { get => Grabbed; set => Grabbed = value; }
@@ -61,7 +56,6 @@ public class PlayerPickDrop : MonoBehaviour
         Held = false;
     }
 
-
     private void Update()
     {
         Debug.DrawRay(CameraLocation.position, CameraLocation.forward * PickUpDistance, Color.green);
@@ -73,7 +67,7 @@ public class PlayerPickDrop : MonoBehaviour
     {
         if (Input.GetKeyDown(InteractKey))
         {
-            if (Physics.Raycast(CameraLocation.position, CameraLocation.forward, out RaycastHit hit, PickUpDistance))
+            if (Physics.Raycast(CameraLocation.position, CameraLocation.forward, out RaycastHit hit, PickUpDistance, InteractLayer))
             {
                 InteractionEvent?.Invoke(hit.collider.gameObject);
                 TryPickUpObject(hit);
@@ -107,10 +101,8 @@ public class PlayerPickDrop : MonoBehaviour
         grabbedObject.Grab(ObjectGrabpoint);
         Grabbed.Add(grabbedObject);
         InventoryManage.AddItemToList(grabbedObject.ObjectName);
-
     }
 
-    // find specific object, then attempt to drop
     void TryDropObject()
     {
         string itemName = InventoryManage.CurrentlyHolding[InventoryManage.CurrentSlotID];
@@ -122,7 +114,6 @@ public class PlayerPickDrop : MonoBehaviour
         }
     }
 
-    // Drop the object
     void DropObject(ObjectGrabbable grabbedObject)
     {
         grabbedObject.Drop(ObjectDroppoint);
@@ -131,20 +122,17 @@ public class PlayerPickDrop : MonoBehaviour
         Grabbed.Remove(grabbedObject);
     }
 
-    // Setting only a specified item as Invisible. If an item is missing the script, shows error
     void SetItemVisibility(string itemName, bool isVisible)
     {
         GameObject itemObject = GameObject.Find(itemName);
 
         if (itemObject != null)
         {
-
             if (itemObject.TryGetComponent<ItemVisibilityController>(out var visibilityController)) visibilityController.SetVisibility(isVisible);
             else Debug.LogError($"Item '{itemName}' is missing the ItemVisibilityController script.");
         }
     }
 
-    // Detecting if an item or object is of a specified type
     void LookDetection()
     {
         if (Physics.Raycast(CameraLocation.position, CameraLocation.forward, out RaycastHit hit, PickUpDistance, InteractLayer))

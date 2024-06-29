@@ -57,7 +57,6 @@ public class OptionsManager : MonoBehaviour
     [Header("Game Objects")]
     [SerializeField] GameObject Previous;
     [SerializeField] GameObject Settings;
-    [SerializeField] MenuTransitionManager transitionManager;
 
     public string[] AntiAliasTypes = { "None", "x2", "x4", "x8" };
     [HideInInspector] public int CurrentAAID = 0;
@@ -357,7 +356,6 @@ public class OptionsManager : MonoBehaviour
         {
             Previous.SetActive(true);
             Settings.SetActive(false);
-            transitionManager.TransitionIn();
         } 
 
     }
@@ -379,7 +377,6 @@ public class OptionsManager : MonoBehaviour
 
         Previous.SetActive(true);
         Settings.SetActive(false);
-        transitionManager.TransitionIn();
     }
     public void RestoreDefaults()
     {

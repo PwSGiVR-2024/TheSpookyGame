@@ -154,7 +154,6 @@ public class KeybindManager : MonoBehaviour
                     CurrentKey = null;
                     PopUp.SetActive(false); // Hide pop-up as an unused key is pressed
                 }
-                
                 else
                 {
                     Debug.LogWarning($"Key '{KeyPressed}' is already assigned to a function.");

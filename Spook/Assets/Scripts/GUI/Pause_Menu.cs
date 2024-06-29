@@ -51,7 +51,6 @@ public class Pause_Menu : MonoBehaviour
     {
         OptionsMenu.SetActive(true);
         PauseMenu.SetActive(false);
-        transitionManager.TransitionIn();
     }
 
 

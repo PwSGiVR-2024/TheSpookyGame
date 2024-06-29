@@ -48,10 +48,23 @@ public class ObjectGrabbable : MonoBehaviour
                 RotateObject(0, 90, 84);
                 MoveObjectToFixedPosition(0,0,0);
                 break;
-            case "Key":
+            case "RedKey":
                 RotateObject(0, -85, 90);
                 MoveObjectToFixedPosition(0.05F, 0, -0.02F);
                 break;
+            case "BlackKey":
+                RotateObject(0, -85, 90);
+                MoveObjectToFixedPosition(0.05F, 0, -0.02F);
+                break;
+            case"BlueKey":
+                RotateObject(0, -85, 90);
+                MoveObjectToFixedPosition(0.05F, 0, -0.02F);
+                break;
+            case "GreenKey":
+                RotateObject(0, -85, 90);
+                MoveObjectToFixedPosition(0.05F, 0, -0.02F);
+                break;
+
             case "Finish Key":
                 RotateObject(0, -85, 90);
                 MoveObjectToFixedPosition(0.05F, 0, -0.02F);

@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Diagnostics.Tracing;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DoorController : MonoBehaviour
@@ -9,8 +11,9 @@ public class DoorController : MonoBehaviour
 
     [Header("Door Settings")]
     [SerializeField] private Animator DoorAnimator;
-    private bool Open;
+    [SerializeField] private bool Open;
     public GameObject RequiredKey;
+    public bool RequiresKey;
     public bool IsLocked;
     private string key;
 
@@ -31,7 +34,9 @@ public class DoorController : MonoBehaviour
 
     private void Awake()
     {
-        key = RequiredKey.name;
+        if (RequiresKey == true)key = RequiredKey.name;
+        else return;
+
     }
     private void Start()
     {

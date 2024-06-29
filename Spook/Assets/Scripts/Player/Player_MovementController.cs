@@ -184,7 +184,10 @@ public class Player_MovementController : MonoBehaviour
             if (hit.transform.TryGetComponent<Renderer>(out var hitRenderer))
             {
                 CurrentMaterial = hitRenderer.material;
+
                 StandingOn = CurrentMaterial.ToString().Split(' ')[0];
+
+                Debug.Log(StandingOn);
             }
         }
     }

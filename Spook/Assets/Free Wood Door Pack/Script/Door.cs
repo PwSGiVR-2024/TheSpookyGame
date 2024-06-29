@@ -8,22 +8,31 @@ namespace DoorScript
     public class Door : MonoBehaviour
     {
         public bool open;
-        public float smooth = 1.0f;
-        float DoorOpenAngle = -90.0f;
-        float DoorCloseAngle = 0.0f;
-        public AudioSource asource;
-        public AudioClip openDoor, closeDoor;
-        public PlayerPickDrop InteractDetect;
-        public bool IsLocked;
-        private bool isAnimating;
+        public float smooth = 1;
+        float DoorOpenAngle = -90;
+        float DoorCloseAngle = 0;
+        [SerializeField] AudioClip DoorOpen;
+        [SerializeField] AudioClip DoorClose;
 
-        // Use this for initialization
-        void Start()
+        PlayerPickDrop InteractDetect;
+        InventoryManagement InventoryManage;
+
+        public GameObject RequiredKey;
+        public bool IsLocked;
+        private string key;
+
+        private void Awake()
         {
-            asource = GetComponent<AudioSource>();
+            key = RequiredKey.name;
         }
 
-        // Update is called once per frame
+        private void OnEnable()
+        {
+            PlayerPickDrop.InteractionEvent += Interact;
+        }
+
+
+
         void Update()
         {
             if (open)
@@ -36,54 +45,58 @@ namespace DoorScript
                 var target1 = Quaternion.Euler(0, DoorCloseAngle, 0);
                 transform.localRotation = Quaternion.Slerp(transform.localRotation, target1, Time.deltaTime * 5 * smooth);
             }
+        }
 
-            if (InteractDetect.IsDoor && Input.GetKeyDown(InteractDetect.InteractKey))
+        public void Interact(GameObject gameObjectReference)
+        {
+            if (gameObjectReference == gameObject)
             {
-                Interact();
+                InteractDoor();
             }
         }
 
         public void OpenDoor()
         {
             open = !open;
-            asource.clip = open ? openDoor : closeDoor;
-            asource.Play();
+            if (open)
+            {
+                AudioManager.Instance.PlaySound(DoorOpen);
+            }
+            else
+            {
+                AudioManager.Instance.PlaySound(DoorClose);
+            }
         }
 
-        private void Interact()
+        private void InteractDoor()
         {
-            if (isAnimating) return;
-
             if (!IsLocked)
             {
                 StartCoroutine(ToggleDoor());
             }
             else
             {
-                TryUnlockDoor();
+                UnlockDoor();
+                
             }
         }
 
-        private void TryUnlockDoor()
+        void UnlockDoor()
         {
-            if (InteractDetect.IsDoor && Input.GetKeyDown(InteractDetect.InteractKey) && IsLocked)
-            {
-                // Add logic here to check for the key and unlock the door if needed.
-                // Assuming InventoryManagement is available and set up correctly.
-                // if (InventoryManage.CurrentlyHolding[InventoryManage.CurrentSlotID] == RequiredKey.name)
-                // {
-                //     IsLocked = false;
-                //     DoorUnlock.Play();  // You would need to set this audio source up if necessary.
-                // }
-            }
+            if(IsLocked && InventoryManage.CurrentlyHolding[InventoryManage.CurrentSlotID] != RequiredKey.name) Debug.Log("Locked");
+            else if(IsLocked && InventoryManage.CurrentlyHolding[InventoryManage.CurrentSlotID] == RequiredKey.name) { Debug.Log("Unlocked"); }
         }
 
         private IEnumerator ToggleDoor()
         {
-            isAnimating = true;
             OpenDoor();
-            yield return new WaitForSeconds(asource.clip.length);
-            isAnimating = false;
+            float clipLength = open ? DoorOpen.length : DoorClose.length;
+            yield return new WaitForSeconds(clipLength);
+        }
+        private void OnDisable()
+        {
+            PlayerPickDrop.InteractionEvent -= Interact;
         }
     }
+
 }

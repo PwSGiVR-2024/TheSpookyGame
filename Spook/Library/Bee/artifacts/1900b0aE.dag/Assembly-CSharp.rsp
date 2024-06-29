@@ -356,7 +356,6 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 -analyzer:"G:/Unity Editors/2022.3.21f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"G:/Unity Editors/2022.3.21f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
-"Assets/Free Wood Door Pack/Script/CameraOpenDoor.cs"
 "Assets/Free Wood Door Pack/Script/Door.cs"
 "Assets/Free Wood Door Pack/Script/FPSController.cs"
 "Assets/LeanTween/Examples/Scripts/Following.cs"
