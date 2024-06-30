@@ -45,7 +45,46 @@ public class FlashlightController : MonoBehaviour
     private void Awake()
     {
         gameManager = GameManager.Instance;
-        LightRays.SetActive(false);
+
+        // Ensure all required components are assigned or log an error if not
+        if (LightRays == null)
+        {
+            Debug.LogError("LightRays is not assigned in the inspector.");
+        }
+
+        if (Lamp == null)
+        {
+            Debug.LogError("Lamp is not assigned in the inspector.");
+        }
+
+        if (InventoryManage == null)
+        {
+            InventoryManage = FindObjectOfType<InventoryManagement>();
+            if (InventoryManage == null)
+            {
+                Debug.LogError("InventoryManage is not assigned and could not be found in the scene.");
+            }
+        }
+
+        if (InteractDetect == null)
+        {
+            InteractDetect = FindObjectOfType<PlayerPickDrop>();
+            if (InteractDetect == null)
+            {
+                Debug.LogError("InteractDetect is not assigned and could not be found in the scene.");
+            }
+        }
+
+        if (Battery == null)
+        {
+            Battery = FindObjectOfType<BatteryScript>();
+            if (Battery == null)
+            {
+                Debug.LogError("Battery is not assigned and could not be found in the scene.");
+            }
+        }
+
+        LightRays?.SetActive(false);
         Charge = MaxCharge;
         Lamp.intensity = 0;
         IsFlashlightOn = false;
@@ -67,11 +106,11 @@ public class FlashlightController : MonoBehaviour
 
     private void BatteryUse()
     {
-        if (Charge < MaxCharge && FlashlightInHand && Input.GetKeyDown(InteractDetect.UseBattery))
+        if (Charge < MaxCharge && FlashlightInHand && Input.GetKeyDown(InteractDetect?.UseBattery ?? KeyCode.None))
         {
             // Find the index of the battery in the inventory
             int batteryIndex = -1;
-            for (int i = 0; i < InventoryManage.Inventory.Count; i++)
+            for (int i = 0; i < InventoryManage?.Inventory.Count; i++)
             {
                 if (InventoryManage.Inventory[i].StartsWith("Battery"))
                 {
@@ -141,12 +180,11 @@ public class FlashlightController : MonoBehaviour
         if (IsFlashlightOn)
         {
             Lamp.intensity = Mathf.Lerp(0.8f, 1.0f, chargePercentage);
-            LightRays.SetActive(true);
+            LightRays?.SetActive(true);
         }
         else
         {
-            //LightRays.SetActive(false);
-            FlashBuzz.Stop();
+            FlashBuzz?.Stop();
             Lamp.intensity = 0;
         }
 
@@ -218,10 +256,10 @@ public class FlashlightController : MonoBehaviour
             return;
         }
     }
+
     private void AnimationOnBatteryOutage()
     {
         if (Charge == 0 && FlashlightInHand && Input.GetMouseButton(0)) OutOfBattery.Play("Out Of Battery");
         else OutOfBattery.StopPlayback();
     }
-
 }

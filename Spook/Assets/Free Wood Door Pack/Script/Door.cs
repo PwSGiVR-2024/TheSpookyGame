@@ -14,24 +14,27 @@ namespace DoorScript
         [SerializeField] AudioClip DoorOpen;
         [SerializeField] AudioClip DoorClose;
 
-        PlayerPickDrop InteractDetect;
-        InventoryManagement InventoryManage;
-
         public GameObject RequiredKey;
         public bool IsLocked;
         private string key;
 
+        private InventoryManagement InventoryManage;
+
         private void Awake()
         {
             key = RequiredKey.name;
+            // Ensure InventoryManage is assigned, either through the inspector or by finding the component in the scene
+            InventoryManage = FindObjectOfType<InventoryManagement>();
+            if (InventoryManage == null)
+            {
+                Debug.LogError("InventoryManage is not assigned in Door script.");
+            }
         }
 
         private void OnEnable()
         {
             PlayerPickDrop.InteractionEvent += Interact;
         }
-
-
 
         void Update()
         {
@@ -77,14 +80,28 @@ namespace DoorScript
             else
             {
                 UnlockDoor();
-                
             }
         }
 
         void UnlockDoor()
         {
-            if(IsLocked && InventoryManage.CurrentlyHolding[InventoryManage.CurrentSlotID] != RequiredKey.name) Debug.Log("Locked");
-            else if(IsLocked && InventoryManage.CurrentlyHolding[InventoryManage.CurrentSlotID] == RequiredKey.name) { Debug.Log("Unlocked"); }
+            if (InventoryManage == null)
+            {
+                Debug.LogError("InventoryManage is not set.");
+                return;
+            }
+
+            string currentItem = InventoryManage.CurrentlyHolding[InventoryManage.CurrentSlotID];
+            if (IsLocked && currentItem != RequiredKey.name)
+            {
+                Debug.Log("Locked: The key does not match.");
+            }
+            else if (IsLocked && currentItem == RequiredKey.name)
+            {
+                Debug.Log("Unlocked");
+                IsLocked = false;
+                OpenDoor(); // Optionally open the door immediately after unlocking
+            }
         }
 
         private IEnumerator ToggleDoor()
@@ -93,10 +110,10 @@ namespace DoorScript
             float clipLength = open ? DoorOpen.length : DoorClose.length;
             yield return new WaitForSeconds(clipLength);
         }
+
         private void OnDisable()
         {
             PlayerPickDrop.InteractionEvent -= Interact;
         }
     }
-
 }
