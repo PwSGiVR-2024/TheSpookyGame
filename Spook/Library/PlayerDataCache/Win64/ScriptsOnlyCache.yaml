@@ -2274,4 +2274,4 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Main Menu.unity
   - Assets/Scenes/Main Level.unity
   - Assets/Scenes/EndScreen.unity
-  playerPath: G:/Gaem/Spook.exe
+  playerPath: G:/Gaem2/Spook.exe
